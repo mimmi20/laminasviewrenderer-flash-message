@@ -12,11 +12,12 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\FlashMessage\View\Helper;
 
+use ArrayAccess;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as LaminasFlashMessenger;
 use Laminas\View\Exception\RuntimeException;
+use Laminas\View\Model\ModelInterface;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Renderer\RendererInterface;
-use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -116,6 +117,9 @@ final class FlashMessengerTest extends TestCase
     /**
      * @throws Exception
      * @throws RuntimeException
+     *
+     * @phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
+     * @phpcs:disable SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
      */
     public function testRender(): void
     {
@@ -125,31 +129,31 @@ final class FlashMessengerTest extends TestCase
             ->willReturn(['error-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentErrorMessages')
-            ->willReturn(['current-error-message']);
+            ->willReturn(['error-message', 'current-error-message']);
         $flashMessenger->expects(self::once())
             ->method('getSuccessMessages')
             ->willReturn(['success-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentSuccessMessages')
-            ->willReturn(['current-success-message']);
+            ->willReturn(['success-message', 'current-success-message']);
         $flashMessenger->expects(self::once())
             ->method('getWarningMessages')
             ->willReturn(['warning-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentWarningMessages')
-            ->willReturn(['current-warning-message']);
+            ->willReturn(['warning-message', 'current-warning-message']);
         $flashMessenger->expects(self::once())
             ->method('getInfoMessages')
             ->willReturn(['info-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentInfoMessages')
-            ->willReturn(['current-info-message']);
+            ->willReturn(['info-message', 'current-info-message']);
         $flashMessenger->expects(self::once())
             ->method('getMessages')
             ->willReturn(['default-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentMessages')
-            ->willReturn(['current-default-message']);
+            ->willReturn(['default-message', 'current-default-message']);
         $flashMessenger->expects(self::once())
             ->method('clearMessagesFromContainer')
             ->willReturn(true);
@@ -159,11 +163,73 @@ final class FlashMessengerTest extends TestCase
 
         $object = new FlashMessenger($flashMessenger);
 
-        $view = $this->createMock(RendererInterface::class);
-        $view->expects(self::exactly(10))
+        $view    = $this->createMock(RendererInterface::class);
+        $matcher = self::exactly(10);
+        $view->expects($matcher)
             ->method('render')
-            ->with(new IsInstanceOf(ViewModel::class), null)
-            ->willReturn('test-render');
+            ->willReturnCallback(
+                static function (ModelInterface | string $nameOrModel, array | ArrayAccess | null $values = null) use ($matcher): string {
+                    self::assertInstanceOf(ViewModel::class, $nameOrModel);
+
+                    match ($matcher->numberOfInvocations()) {
+                        1, 2 => self::assertSame('danger', $nameOrModel->getVariable('alertLevel')),
+                        3, 4 => self::assertSame('warning', $nameOrModel->getVariable('alertLevel')),
+                        5, 6 => self::assertSame('info', $nameOrModel->getVariable('alertLevel')),
+                        7, 8 => self::assertSame('success', $nameOrModel->getVariable('alertLevel')),
+                        9, 10 => self::assertSame('primary', $nameOrModel->getVariable('alertLevel')),
+                        default => self::assertSame('', $nameOrModel->getVariable('alertLevel')),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(
+                            'error-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        2 => self::assertSame(
+                            'current-error-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        3 => self::assertSame(
+                            'warning-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        4 => self::assertSame(
+                            'current-warning-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        5 => self::assertSame(
+                            'info-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        6 => self::assertSame(
+                            'current-info-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        7 => self::assertSame(
+                            'success-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        8 => self::assertSame(
+                            'current-success-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        9 => self::assertSame(
+                            'default-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        10 => self::assertSame(
+                            'current-default-message',
+                            $nameOrModel->getVariable('alertMessage'),
+                        ),
+                        default => self::assertSame('', $nameOrModel->getVariable('alertMessage')),
+                    };
+
+                    self::assertSame('widget/bootstrap-alert', $nameOrModel->getTemplate());
+                    self::assertNull($values);
+
+                    return 'test-render';
+                },
+            );
 
         $object->setView($view);
 

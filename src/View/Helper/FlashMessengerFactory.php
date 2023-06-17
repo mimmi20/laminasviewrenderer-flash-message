@@ -12,11 +12,11 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\FlashMessage\View\Helper;
 
-use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as LaminasFlashMessenger;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
 use function assert;
 
