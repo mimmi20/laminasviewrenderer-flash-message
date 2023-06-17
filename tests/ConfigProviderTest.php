@@ -21,7 +21,7 @@ final class ConfigProviderTest extends TestCase
     /** @throws Exception */
     public function testGetViewHelperConfig(): void
     {
-        $object = new ConfigProvider();
+        $object           = new ConfigProvider();
         $viewHelperConfig = $object->getViewHelperConfig();
 
         self::assertIsArray($viewHelperConfig);
