@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\FlashMessage;
 
+use Mimmi20\LaminasView\FlashMessage\View\Helper\FlashMessenger;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -21,11 +22,19 @@ final class ConfigProviderTest extends TestCase
     public function testGetViewHelperConfig(): void
     {
         $object = new ConfigProvider();
-        $config = $object->getViewHelperConfig();
+        $viewHelperConfig = $object->getViewHelperConfig();
 
-        self::assertIsArray($config);
-        self::assertArrayHasKey('factories', $config);
-        self::assertArrayHasKey('aliases', $config);
+        self::assertIsArray($viewHelperConfig);
+
+        self::assertArrayHasKey('factories', $viewHelperConfig);
+        $factories = $viewHelperConfig['factories'];
+        self::assertIsArray($factories);
+        self::assertArrayHasKey(FlashMessenger::class, $factories);
+
+        self::assertArrayHasKey('aliases', $viewHelperConfig);
+        $aliases = $viewHelperConfig['aliases'];
+        self::assertIsArray($aliases);
+        self::assertArrayHasKey('bootstrapFlashMessenger', $aliases);
     }
 
     /** @throws Exception */
@@ -36,5 +45,19 @@ final class ConfigProviderTest extends TestCase
 
         self::assertIsArray($config);
         self::assertArrayHasKey('view_helpers', $config);
+
+        $viewHelperConfig = $config['view_helpers'];
+
+        self::assertIsArray($viewHelperConfig);
+
+        self::assertArrayHasKey('factories', $viewHelperConfig);
+        $factories = $viewHelperConfig['factories'];
+        self::assertIsArray($factories);
+        self::assertArrayHasKey(FlashMessenger::class, $factories);
+
+        self::assertArrayHasKey('aliases', $viewHelperConfig);
+        $aliases = $viewHelperConfig['aliases'];
+        self::assertIsArray($aliases);
+        self::assertArrayHasKey('bootstrapFlashMessenger', $aliases);
     }
 }
