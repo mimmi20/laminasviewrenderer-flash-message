@@ -1,0 +1,7 @@
+<div class="alert alert-dismissible alert-<?= $this->escapeHtml($this->alertLevel); ?>" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="<?= $this->escapeHtml($this->translate('Close')); ?>">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <p><?= $this->escapeHtml($this->translate($this->alertMessage)); ?></p>
+</div>
