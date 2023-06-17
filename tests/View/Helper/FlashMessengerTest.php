@@ -129,31 +129,31 @@ final class FlashMessengerTest extends TestCase
             ->willReturn(['error-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentErrorMessages')
-            ->willReturn(['current-error-message']);
+            ->willReturn(['error-message', 'current-error-message']);
         $flashMessenger->expects(self::once())
             ->method('getSuccessMessages')
             ->willReturn(['success-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentSuccessMessages')
-            ->willReturn(['current-success-message']);
+            ->willReturn(['success-message', 'current-success-message']);
         $flashMessenger->expects(self::once())
             ->method('getWarningMessages')
             ->willReturn(['warning-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentWarningMessages')
-            ->willReturn(['current-warning-message']);
+            ->willReturn(['warning-message', 'current-warning-message']);
         $flashMessenger->expects(self::once())
             ->method('getInfoMessages')
             ->willReturn(['info-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentInfoMessages')
-            ->willReturn(['current-info-message']);
+            ->willReturn(['info-message', 'current-info-message']);
         $flashMessenger->expects(self::once())
             ->method('getMessages')
             ->willReturn(['default-message']);
         $flashMessenger->expects(self::once())
             ->method('getCurrentMessages')
-            ->willReturn(['current-default-message']);
+            ->willReturn(['default-message', 'current-default-message']);
         $flashMessenger->expects(self::once())
             ->method('clearMessagesFromContainer')
             ->willReturn(true);
