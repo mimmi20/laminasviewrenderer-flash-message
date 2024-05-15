@@ -45,6 +45,8 @@ final class FlashMessenger extends AbstractHelper
      * Outputs message depending on flag
      *
      * @throws RuntimeException
+     *
+     * @api
      */
     public function render(): string
     {
