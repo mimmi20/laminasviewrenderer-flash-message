@@ -15,6 +15,7 @@ namespace Mimmi20\LaminasView\FlashMessage\View\Helper;
 
 use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as LaminasFlashMessenger;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -25,6 +26,7 @@ final class FlashMessengerFactoryTest extends TestCase
     private FlashMessengerFactory $object;
 
     /** @throws void */
+    #[Override]
     protected function setUp(): void
     {
         $this->object = new FlashMessengerFactory();
