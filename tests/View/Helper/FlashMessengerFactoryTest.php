@@ -15,7 +15,8 @@ namespace Mimmi20\LaminasView\FlashMessage\View\Helper;
 
 use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as LaminasFlashMessenger;
-use Override;
+use PHPUnit\Event\NoPreviousThrowableException;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -23,18 +24,12 @@ use Psr\Container\NotFoundExceptionInterface;
 
 final class FlashMessengerFactoryTest extends TestCase
 {
-    private FlashMessengerFactory $object;
-
-    /** @throws void */
-    #[Override]
-    protected function setUp(): void
-    {
-        $this->object = new FlashMessengerFactory();
-    }
-
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvoke(): void
     {
@@ -60,7 +55,7 @@ final class FlashMessengerFactoryTest extends TestCase
         $container->expects(self::never())
             ->method('has');
 
-        $result = ($this->object)($container, '');
+        $result = (new FlashMessengerFactory())($container, '');
 
         self::assertInstanceOf(FlashMessenger::class, $result);
     }
