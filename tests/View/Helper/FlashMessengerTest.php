@@ -19,6 +19,7 @@ use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Model\ModelInterface;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Renderer\RendererInterface;
+use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,11 @@ use function str_repeat;
 
 final class FlashMessengerTest extends TestCase
 {
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testInvoke(): void
     {
         $flashMessenger = $this->createMock(LaminasFlashMessenger::class);
@@ -63,6 +68,8 @@ final class FlashMessengerTest extends TestCase
     /**
      * @throws Exception
      * @throws RuntimeException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testRenderWithoutMessages(): void
     {
@@ -118,6 +125,8 @@ final class FlashMessengerTest extends TestCase
     /**
      * @throws Exception
      * @throws RuntimeException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      *
      * @phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
      * @phpcs:disable SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
@@ -240,6 +249,8 @@ final class FlashMessengerTest extends TestCase
     /**
      * @throws Exception
      * @throws RuntimeException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testRenderWithException(): void
     {
